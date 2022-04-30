@@ -19,46 +19,21 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 /* ---- (Dashboard) ---- */
 
+//Show all Category
+app.get('/ShowCategory/', routes.getAllCategory);
 
-app.get('/ShowGame/gameId', routes.getRandomGames);
+//Show all questions in this Category
+app.get('/:categoryId', routes.getAllQuestions);
 
+//update the link for current Category
+app.get('/updateLinkForCategory/:Link&:Group', routes.updateLinkForCategory);
 
-app.get('/:gvid', routes.getPosters);
+//Delete the link for current Category
+app.get('/deleteLinkForCategory/:Group', routes.deleteLinkForCategory);
 
-app.get('/Dashboard/:search', routes.getSearch);
+app.get('/deleteQuestionsForCategory/:Group', routes.deleteQuestionsForCategory);
 
-
-
-
-
-
-
-
-/* ---- (Recommendations) ---- */
-app.get('/recommendations/:gameName', routes.getRecs);
-
-
-/* ---- (comparison) ---- */
-app.get('/getGameInfo/:gameName', routes.getGameInfo);
-
-
-
-/* ---- (discover) ---- */
-app.get('/decades/decade', routes.getDecades);
-
-
-app.get('/showGenre/Genres', routes.getGenre);
-
-app.get('/showPlat/plat', routes.getplat);
-
-
-app.get('/Class/class', routes.getclass);
-
-
-app.get('/bestAtrribute/attris/:l1&:l2&:l3&:l4', routes.discover);
-
-
-
+app.get('/updateIdForQuestions/', routes.updateIdForQuestions);
 
 
 /* ---- (user) ---- */

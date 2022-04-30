@@ -23,7 +23,7 @@ export default class PageNavbar extends React.Component {
 	}
 
 	componentDidMount() {
-		const pageList = ['dashboard', 'recommendations', 'discover','comparison','logout'];
+		const pageList = ['dashboard', 'logout'];
 
 		let navbarDivs = pageList.map((page, i) => {
 			if (this.props.active === page) {
@@ -48,7 +48,7 @@ export default class PageNavbar extends React.Component {
 				<nav className="navbar navbar-expand-lg navbar-dark bg-black">
 				<FontAwesomeIcon icon = {faGamepad} aria-hidden="true"/>
 			      <span className="navbar-brand center">
-			      <Title> NO GAME NO LIFE</Title>
+			      <Title>COHQ</Title>
 			      </span>
 			      <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
 			        <div className="navbar-nav">

@@ -13,12 +13,11 @@ export default class ImageBox extends React.Component {
             return <Redirect to='/Register' />
         }
 		return (
-			<figure>
-			<a href={this.props.vg_url} target="_blank">
-			<img src={this.props.photo_url} alt={this.props.name} />
-    		<figcaption>{this.props.name}</figcaption>
-			</a>
-			</figure>
+			<div>
+				<div className="QuestionContent">{this.props.question_content}</div>
+				<div className="username">{this.props.username}</div>
+				<div className="question_position">{this.props.questionId}</div>
+			</div>
 		);
 	}
 }

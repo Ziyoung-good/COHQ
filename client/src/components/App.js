@@ -5,9 +5,6 @@ import {
 	Switch
 } from 'react-router-dom';
 import Dashboard from './Dashboard';
-import Recommendations from './Recommendations';
-import Discover from './Discover';
-import Comparison from './Comparison';
 import Register from './Register';
 import Logout from './Logout';
 
@@ -37,24 +34,6 @@ export default class App extends React.Component {
 							path="/dashboard"
 							render={() => (
 								<Dashboard />
-							)}
-						/>
-						<Route
-							path="/recommendations"
-							render={() => (
-								<Recommendations />
-							)}
-						/>
-						<Route
-							path="/Discover"
-							render={() => (
-								<Discover />
-							)}
-						/>
-						<Route
-							path="/comparison"
-							render={() => (
-								<Comparison />
 							)}
 						/>
 						<Route

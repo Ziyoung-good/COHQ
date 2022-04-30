@@ -51,6 +51,7 @@ export default class Register extends React.Component {
 				if (res.data.status === 'success') {
 					console.log("Login Success!");
 					store.set('loggedIn', true);
+					store.set('user_name', res.data.username);
 					this.setState({ isLoggedIn: true });
 				} else if (res.data.status === 'unexist') {
 					alert("User Does Not Exist!");
@@ -80,7 +81,7 @@ export default class Register extends React.Component {
 		}
 		return (
 			<div className='Login'>
-				<h1 style={{ textAlign: 'center' }}>No Game, No Life - a Game Database Web App</h1>
+				<h1 style={{ textAlign: 'center' }}>COHQ - a new powerful Queue System</h1>
 				<form>
 					<h3 style={{ textAlign: 'center' }}>Register or Sign in</h3>
 					<div>
