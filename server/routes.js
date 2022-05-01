@@ -41,6 +41,22 @@ function getAllQuestions(req, res) {
   });
 };
 
+function getUserPermission(req, res) {
+
+  var http = require('http');
+  var username = this.state.username;
+  console.log("getUserPermission:"+username);
+  
+  var query = `select permission, username from user_info Where '${username}' = username `
+
+  connection.query(query, function(err, rows, fields){
+    if (err) console.log(err);
+    else{
+      res.json(rows);
+    }
+  });
+};
+
 function updateLinkForCategory(req, res){
     var Link = req.param('Link');
     console.log(Link);
@@ -159,5 +175,6 @@ module.exports = {
   updateLinkForCategory: updateLinkForCategory,
   deleteLinkForCategory: deleteLinkForCategory,
   deleteQuestionsForCategory: deleteQuestionsForCategory,
-  updateIdForQuestions: updateIdForQuestions
+  updateIdForQuestions: updateIdForQuestions,
+  getUserPermission: getUserPermission
 }

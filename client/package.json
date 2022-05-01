@@ -9,7 +9,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "axios": "^0.19.2",
+    "axios": "^0.27.2",
     "bootstrap": "^4.4.1",
     "mocha": "^7.0.0",
     "react": "^16.12.0",
@@ -18,11 +18,12 @@
     "react-dropdown": "^1.6.4",
     "react-google-login-component": "^0.9.3",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.3.1",
+    "react-scripts": "^3.4.4",
     "redirect": "^0.2.0",
     "save": "^2.4.0",
     "selenium-webdriver": "^4.0.0-alpha.5",
-    "store": "^2.0.12"
+    "store": "^2.0.12",
+    "styled-components": "^5.3.5"
   },
   "scripts": {
     "start": "react-scripts start",

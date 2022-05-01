@@ -64,6 +64,22 @@ export default class Dashboard extends React.Component {
       
       let Category_collection = [];
       let question_List = [];
+    
+	console.log("get user permission");
+	// get the user permission
+    fetch("http://localhost:8081/getUserPermission/",
+    {
+      method: 'GET' // The type of HTTP request.
+    }).then(res => {
+      // Convert the response data to a JSON.
+      return res.json();
+
+    }, err => {
+      // Print the error if there is one.
+      console.log(err);
+    }).then(permission => {	
+		console.log("user permission:"+permission);
+	});
 
 
       for (var i = 0; i < CategoryList.length; i++) {
