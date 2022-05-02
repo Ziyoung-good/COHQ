@@ -35,8 +35,9 @@ app.get('/deleteQuestionsForCategory/:Group', routes.deleteQuestionsForCategory)
 
 app.get('/updateIdForQuestions/', routes.updateIdForQuestions);
 
-app.get('/getUserPermission/', routes.getUserPermission);
+app.get('/getUserPermission/:username', routes.getUserPermission);
 
+app.get('/submitNewQuestion/:categoryId&:username&:question&:questionId', routes.submitNewQuestion);
 
 /* ---- (user) ---- */
 

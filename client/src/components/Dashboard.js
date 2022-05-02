@@ -33,14 +33,21 @@ export default class Dashboard extends React.Component {
       rec1Text: "",
       status: 0,
       current_group: 0,
-      link: ""
+      link: "",
+	  permission: 0, //0 for TA, 1 for Student
+	  priority_counter: 0,
+	  question: "",
+	  selected_category: "",
     }
-
+	// 
   
     // this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleStatusChange0 = this.handleStatusChange0.bind(this);
     this.handleStatusChange1 = this.handleStatusChange1.bind(this);
     this.handleLinkChange = this.handleLinkChange.bind(this);
+	this.handleQuestionChange = this.handleQuestionChange.bind(this);
+	this.handleCategoryChange = this.handleCategoryChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   // Get Random game which have url and photo.
@@ -64,22 +71,6 @@ export default class Dashboard extends React.Component {
       
       let Category_collection = [];
       let question_List = [];
-    
-	console.log("get user permission");
-	// get the user permission
-    fetch("http://localhost:8081/getUserPermission/",
-    {
-      method: 'GET' // The type of HTTP request.
-    }).then(res => {
-      // Convert the response data to a JSON.
-      return res.json();
-
-    }, err => {
-      // Print the error if there is one.
-      console.log(err);
-    }).then(permission => {	
-		console.log("user permission:"+permission);
-	});
 
 
       for (var i = 0; i < CategoryList.length; i++) {
@@ -89,7 +80,7 @@ export default class Dashboard extends React.Component {
           Category_collection.push(CategoryName);
           if (i == 3){
           this.setState({
-              Category_list: Category_collection
+              Category_list: Category_collection,
               }); 
           }
 
@@ -119,6 +110,27 @@ export default class Dashboard extends React.Component {
             });
         }
 
+		console.log("get user permission for "+store.get('user_name'));
+		// get the user permission
+		fetch("http://localhost:8081/getUserPermission/"+store.get('user_name'),
+		{
+		  method: 'GET' // The type of HTTP request.
+		}).then(res => {
+		  // Convert the response data to a JSON.
+		  return res.json();
+
+		}, err => {
+		  // Print the error if there is one.
+		  console.log(err);
+		}).then(data => {		
+			var user_permission = data[0].permission;
+			console.log("user permission:"+JSON.stringify(data)+user_permission);
+			this.setState({
+				permission: user_permission
+			});
+			console.log("set permission: "+this.state.permission);
+		});
+		
 
       }, err => {
       // Print the error if there is one.
@@ -139,7 +151,6 @@ export default class Dashboard extends React.Component {
     this.setState({
       link: e.target.value
     })
-
   }
 
   // handle the action when answering questions
@@ -204,6 +215,40 @@ export default class Dashboard extends React.Component {
       status: 0
     });
   }
+  
+  // handle the action submitting a question
+  handleQuestionChange(event) {
+	  console.log("handleQuestionChange: "+event.target.value);
+    this.setState({question: event.target.value});
+  }
+
+  // handle the action submitting a question
+  handleCategoryChange(event) {
+	  console.log("handleCategoryChange: "+event.target.value);
+    this.setState({selected_category: event.target.value});
+  }
+
+  handleSubmit(event) {
+  
+	this.setState({priority_counter: this.state.priority_counter+1});
+	
+	
+	//update the question to the database for this category
+    fetch("http://localhost:8081/submitNewQuestion/"+this.state.selected_category+"&"+store.get('user_name')+"&"+this.state.question+"&"+this.state.priority_counter, {
+    method: 'GET' // The type of HTTP request.
+    }).then(res => {
+		console.log("question was submitted");
+    }, err => {
+    // Print the error if there is one.
+      console.log(err);
+    });
+	
+	alert('Your question was submitted to the queue: ' + this.state.question + " with category" + this.state.selected_category + " and priority " + this.state.priority_counter);
+    event.preventDefault();
+
+  }
+
+
 
   render() { 
 
@@ -230,6 +275,7 @@ export default class Dashboard extends React.Component {
                       Office Hour Queue for CIS700
           </div>
           <div className="Dashboard-container">
+          {this.state.permission == 0 && <div className="Instructor-container"> 
               <div>
                     <div>{this.state.Category_list[0]}</div>
                     <div>{this.state.Category[this.state.Category_list[0]]}</div>
@@ -322,9 +368,44 @@ export default class Dashboard extends React.Component {
                     <button type="submit" onClick={() => this.handleStatusChange1(3)}>Answered</button></div>}
 
               </div>
+
+			
+                    </div> }{/*instructor container*/}
+			  
+			  <br></br>
+				{this.state.permission == 1 && <div className="student-container"> 
+				  <form onSubmit={this.handleSubmit}>
+					
+					<label>
+					  Pick the category for your question:
+					  <select value={this.state.selected_category} onChange={this.handleCategoryChange}>
+						<option >Pick a value</option>
+						<option value={this.state.Category_list[0]}>{this.state.Category_list[0]}</option>
+						<option value={this.state.Category_list[1]}>{this.state.Category_list[1]}</option>
+						<option value={this.state.Category_list[2]}>{this.state.Category_list[2]}</option>
+						<option value={this.state.Category_list[3]}>{this.state.Category_list[3]}</option>
+					  </select>
+					</label>
+					
+					<label>
+					  Question: 
+					  <textarea value={this.state.question} onChange={this.handleQuestionChange} />
+					</label>
+					<input type="submit" value="Submit" />
+				  </form>
+				
+				</div> }{/*student container*/}
+			  
+			  
           </div>
         </div>
       </div>
+	  
+	
+
+	  
+	  
+	  
       </div>
   );
 }

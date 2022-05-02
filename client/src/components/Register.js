@@ -51,7 +51,8 @@ export default class Register extends React.Component {
 				if (res.data.status === 'success') {
 					console.log("Login Success!");
 					store.set('loggedIn', true);
-					store.set('user_name', res.data.username);
+					store.set('user_name', res.data.name);
+					console.log('trying to figure out the username:'+res.data.name);
 					this.setState({ isLoggedIn: true });
 				} else if (res.data.status === 'unexist') {
 					alert("User Does Not Exist!");

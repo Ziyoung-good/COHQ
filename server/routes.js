@@ -31,7 +31,24 @@ function getAllQuestions(req, res) {
   var http = require('http');
   var categoryId = req.params.categoryId;
   
-  var query = `select question_content, username, question_id from question_table Where '${categoryId}' = question_table.category `
+  var query = `select question_content, username, question_id from question_table Where '${categoryId}' = question_table.category `;
+
+  connection.query(query, function(err, rows, fields){
+    if (err) console.log(err);
+    else{
+      res.json(rows);
+    }
+  });
+};
+
+function submitNewQuestion(req, res) {
+
+  var categoryId = req.params.categoryId;
+  var username = req.params.username;
+  var question = req.params.question;
+  var questionId = req.params.questionId;
+  
+  var query = `INSERT INTO dbname2.question_table (question_id, question_content, username, category) VALUES ('${questionId}', '${question}', '${username}', '${categoryId}')`;
 
   connection.query(query, function(err, rows, fields){
     if (err) console.log(err);
@@ -42,12 +59,10 @@ function getAllQuestions(req, res) {
 };
 
 function getUserPermission(req, res) {
-
-  var http = require('http');
-  var username = this.state.username;
+  var username = req.param('username');
   console.log("getUserPermission:"+username);
   
-  var query = `select permission, username from user_info Where '${username}' = username `
+  var query = `select permission, username from user_info Where username = '${username}' `;
 
   connection.query(query, function(err, rows, fields){
     if (err) console.log(err);
@@ -176,5 +191,6 @@ module.exports = {
   deleteLinkForCategory: deleteLinkForCategory,
   deleteQuestionsForCategory: deleteQuestionsForCategory,
   updateIdForQuestions: updateIdForQuestions,
-  getUserPermission: getUserPermission
-}
+  getUserPermission: getUserPermission,
+  submitNewQuestion: submitNewQuestion,
+};
