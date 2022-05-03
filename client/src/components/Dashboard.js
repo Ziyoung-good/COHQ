@@ -386,11 +386,12 @@ export default class Dashboard extends React.Component {
 						<option value={this.state.Category_list[3]}>{this.state.Category_list[3]}</option>
 					  </select>
 					</label>
-					
+					<br></br>
 					<label>
 					  Question: 
 					  <textarea value={this.state.question} onChange={this.handleQuestionChange} />
 					</label>
+					<br></br>
 					<input type="submit" value="Submit" />
 				  </form>
 				
