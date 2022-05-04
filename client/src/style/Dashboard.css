@@ -1,0 +1,174 @@
+
+
+.Dashboard-container{
+  width:1050px;
+  /*display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;*/
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.GameKingdom{
+	font-family: Cinzel;
+	font-size: 40px;
+	color: #5E7EBE;
+	margin-bottom: 25px;
+	text-align: center;
+}
+
+
+.question-table{
+  padding-top: 10px;
+  padding-right: 30px;
+  padding-bottom: 10px;
+  padding-left: 30px;
+  text-align: center;
+}
+
+
+
+.link-Container{
+  text-align: center;
+}
+
+.button-Container{
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.Category-name{
+  text-align: center;
+  padding-bottom: 30px;
+  font-family: 'PT Sans';
+  font-style: italic;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.Instructor-container{
+  /*display: flex;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  row-gap: 10px;*/
+}
+
+label {
+  margin-top: .33em;
+  display: block;
+}
+
+.Category-container{
+  border-width:2px;
+  border-style:solid;
+  border-color:#6FA9EB;
+  border-radius: 30px;
+  list-style: none;
+  flex: 0 0 49%;
+}
+
+.open-close-container{
+
+}
+
+.open-button{
+  background-color: #3477C3; /* Green */
+  border: none;
+  color: white;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+  border-color:#6FA9EB;
+  border-radius: 10px;
+}
+
+.Category-Control{
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  row-gap: 10px;
+}
+
+.jumbotron
+{
+	color: #2c3e50;
+	background: #ecf0f1;
+}
+
+.form-group{
+	
+	width: 500px; 
+	height: 20px
+
+}
+.form-control{
+	text-align: center;
+}
+
+figure {
+  display: inline-block;
+  border-radius: 10px;
+  margin: 10px;
+}
+figure img {
+  border: 1px dotted gray;
+  vertical-align: top;
+  border-radius: 10px;
+  width: 200px;
+  height: 250px;
+  opacity: 0.8;
+}
+
+figure img:hover {
+  opacity: 1.0;
+}
+
+figure figcaption {
+  border-radius: 10px;
+  text-align: center;
+  width: 180px;
+
+}
+
+.student-table-itme {
+  border: 2px solid forestgreen;
+  width: 800px;
+  height: 200px;
+}
+
+th {
+  border-bottom: 1px solid black;
+}
+
+td {
+  text-align: center;
+}
+
+.table-item{
+  margin-left: auto;
+  margin-right: auto;
+  border: 2px solid forestgreen;
+}
+
+.Warning{
+  width:1050px;
+  /*display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;*/
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  font-size: 25px;
+  color:  white;
+
+}
+.Searchbar{
+  font-size: 40px;
+  text-align: center;
+  height: 40px;
+  color: #5E7EBE;
+}
+
