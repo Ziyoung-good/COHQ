@@ -37,6 +37,10 @@ app.get('/updateIdForQuestions/', routes.updateIdForQuestions);
 
 app.get('/getUserPermission/:username', routes.getUserPermission);
 
+app.get('/getLatestPosition/:username', routes.getLatestPosition);
+
+app.get('/getUserQuestions/:username', routes.getUserQuestions);
+
 app.get('/submitNewQuestion/:categoryId&:username&:question&:questionId', routes.submitNewQuestion);
 
 /* ---- (user) ---- */

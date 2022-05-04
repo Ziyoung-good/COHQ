@@ -13,6 +13,7 @@ import { faCoffee,faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Redirect } from 'react-router-dom';
 import ImageBox from './ImageBox';
 
+
 import { 
   Container1,
   SearchForm,
@@ -38,6 +39,9 @@ export default class Dashboard extends React.Component {
 	  priority_counter: 0,
 	  question: "",
 	  selected_category: "",
+	  question_submitted: false,
+	  student_rows: [], //rows of questions for the (student) user
+	  refresh: 0,
     }
 	// 
   
@@ -50,9 +54,13 @@ export default class Dashboard extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+
+
   // Get Random game which have url and photo.
   componentDidMount() {
-    // Send an HTTP request to the server.
+    //timer to refresh every 
+	
+	// Send an HTTP request to the server.
 
     // question page for professor
     fetch("http://localhost:8081/ShowCategory/",
@@ -109,7 +117,10 @@ export default class Dashboard extends React.Component {
 
             });
         }
-
+		
+		
+		//** INITIALIZE STATE VARIABLES **//
+		console.log("INITIALIZING");
 		console.log("get user permission for "+store.get('user_name'));
 		// get the user permission
 		fetch("http://localhost:8081/getUserPermission/"+store.get('user_name'),
@@ -130,13 +141,60 @@ export default class Dashboard extends React.Component {
 			});
 			console.log("set permission: "+this.state.permission);
 		});
-		
+
+		//check to see if there are any questions in the question_table for the user
+		fetch("http://localhost:8081/getUserQuestions/"+store.get('user_name'), {
+		method: 'GET' // The type of HTTP request.
+		}).then(res => {
+			console.log("get users questions");
+			return res.json();
+		}, err => {
+		// Print the error if there is one.
+		  console.log(err);
+		}).then( data => {		
+				var rows = data;
+				console.log("user question:"+store.get('user_name')+JSON.stringify(data)+Object.keys(data).length);
+				if (Object.keys(data).length > 0) {
+					this.setState({
+						student_rows: data,
+						question_submitted: true
+					});
+					console.log("initialize question_submitted state:" +this.state.question_submitted);
+				}
+			});
+		console.log("question_submitted flag: "+this.state.question_submitted);
+
+
+		//intialize priority_counter
+		fetch("http://localhost:8081/getLatestPosition/"+store.get("user_name"), {
+		method: 'GET' // The type of HTTP request.
+		}).then(res => {
+			console.log("get last queue position");
+			return res.json();
+		}, err => {
+		// Print the error if there is one.
+		  console.log(err);
+		}).then( data => {	
+			this.setState({
+				priority_counter: data[0].max+1
+			});
+			console.log("initialize priority_counter: "+ this.state.priority_counter);
+		});
+	
 
       }, err => {
       // Print the error if there is one.
           console.log(err);
-      });
+      }); //Show Categories
+	  
+	
+	this.setState({
+		refresh: 1
+	});
+	  
+	  
 }
+
 
 // change the value when after you submit
 // handleSearchChange(e) {
@@ -229,9 +287,6 @@ export default class Dashboard extends React.Component {
   }
 
   handleSubmit(event) {
-  
-	this.setState({priority_counter: this.state.priority_counter+1});
-	
 	
 	//update the question to the database for this category
     fetch("http://localhost:8081/submitNewQuestion/"+this.state.selected_category+"&"+store.get('user_name')+"&"+this.state.question+"&"+this.state.priority_counter, {
@@ -245,6 +300,52 @@ export default class Dashboard extends React.Component {
 	
 	alert('Your question was submitted to the queue: ' + this.state.question + " with category" + this.state.selected_category + " and priority " + this.state.priority_counter);
     event.preventDefault();
+	
+	this.setState({
+		question_submitted: true
+	});
+	
+
+	//check to see if there are any questions in the question_table for the user
+	fetch("http://localhost:8081/getUserQuestions/"+store.get('user_name'), {
+    method: 'GET' // The type of HTTP request.
+    }).then(res => {
+		console.log("get users questions");
+		return res.json();
+    }, err => {
+    // Print the error if there is one.
+      console.log(err);
+    }).then( data => {		
+			var rows = data;
+			console.log("user question:"+store.get('user_name')+JSON.stringify(data)+Object.keys(data).length);
+			if (Object.keys(data).length > 0) {
+				this.setState({
+					student_rows: data,
+					question_submitted: true
+				});
+				console.log("set question_submitted state: "+this.state.question_submitted);
+			}
+		});
+
+
+	//get and update priority_counter
+	fetch("http://localhost:8081/getLatestPosition/"+store.get("user_name"), {
+	method: 'GET' // The type of HTTP request.
+	}).then(res => {
+		console.log("get priority_counter from getLastQPosition");
+		return res.json();
+	}, err => {
+	// Print the error if there is one.
+	  console.log(err);
+	}).then( data => {		
+		var next_p = data[0].max;
+		console.log("next p:"+next_p);
+		this.setState({
+			priority_counter: next_p+1
+		});
+		console.log("initialize priority_counter: "+this.state.priority_counter);
+	});
+	
 
   }
 
@@ -374,7 +475,7 @@ export default class Dashboard extends React.Component {
 			  
 			  <br></br>
 				{this.state.permission == 1 && <div className="student-container"> 
-				  <form onSubmit={this.handleSubmit}>
+				  {!this.state.question_submitted && <form onSubmit={this.handleSubmit}>
 					
 					<label>
 					  Pick the category for your question:
@@ -394,8 +495,34 @@ export default class Dashboard extends React.Component {
 					<br></br>
 					<input type="submit" value="Submit" />
 				  </form>
+				  }
 				
-				</div> }{/*student container*/}
+				{this.state.question_submitted && <div className="student-submitted-container">
+					<table>
+						<thead>
+							<tr>
+							  <th>Question ID</th>
+							  <th>Category</th>
+							  <th>Question</th>
+							</tr>
+						</thead>
+						<tbody>
+							{this.state.student_rows.map((val, key) => {
+							  return (
+								<tr key={key}>
+								  <td>{val.question_id}</td>
+								  <td>{val.category}</td>
+								  <td>{val.question_content}</td>
+								</tr>
+							  )
+							})}
+						</tbody>
+					</table>
+				
+				</div>
+				} {/*student submitted container*/}
+				</div> 
+				} {/*student container*/}
 			  
 			  
           </div>

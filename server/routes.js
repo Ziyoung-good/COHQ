@@ -59,10 +59,37 @@ function submitNewQuestion(req, res) {
 };
 
 function getUserPermission(req, res) {
-  var username = req.param('username');
+  var username = req.params.username;
   console.log("getUserPermission:"+username);
   
   var query = `select permission, username from user_info Where username = '${username}' `;
+
+  connection.query(query, function(err, rows, fields){
+    if (err) console.log(err);
+    else{
+      res.json(rows);
+    }
+  });
+};
+
+function getUserQuestions(req, res) {
+  var username = req.params.username;
+  console.log("getUserQuestions:"+username);
+  
+  var query = `select question_id, question_content, category from question_table Where username = '${username}' `;
+
+  connection.query(query, function(err, rows, fields){
+    if (err) console.log(err);
+    else{
+      res.json(rows);
+    }
+  });
+};
+
+function getLatestPosition(req, res) {
+  console.log("getLatestPosition");
+  
+  var query = `select max(question_id) as max from question_table `;
 
   connection.query(query, function(err, rows, fields){
     if (err) console.log(err);
@@ -192,5 +219,8 @@ module.exports = {
   deleteQuestionsForCategory: deleteQuestionsForCategory,
   updateIdForQuestions: updateIdForQuestions,
   getUserPermission: getUserPermission,
+  getUserQuestions: getUserQuestions,
   submitNewQuestion: submitNewQuestion,
+  getLatestPosition: getLatestPosition,
+  
 };

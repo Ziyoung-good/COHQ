@@ -59,6 +59,11 @@ figure figcaption {
 
 }
 
+label {
+  margin-top: .33em;
+  display: block;
+}
+
 .Warning{
   width:1050px;
   /*display: flex;
@@ -76,5 +81,19 @@ figure figcaption {
   text-align: center;
   height: 40px;
   color: #5E7EBE;
+}
+
+table {
+  border: 2px solid forestgreen;
+  width: 800px;
+  height: 200px;
+}
+  
+th {
+  border-bottom: 1px solid black;
+}
+  
+td {
+  text-align: center;
 }
 
