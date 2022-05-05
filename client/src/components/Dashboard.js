@@ -566,23 +566,49 @@ export default class Dashboard extends React.Component {
           </Header>
 				  {!this.state.question_submitted && <form onSubmit={this.handleSubmit}>
 					
+
 					<label>
-					  Pick the category for your question:
+                        <div className="student-question-title">
+					  Your Question:
+                            </div>
+
+					  <textarea rows="5" cols="40" value={this.state.question} onChange={this.handleQuestionChange} />
+					</label>
+					<br></br>
+                      
+					<label >
+                        <div className="student-question-title">
+					  Question Category:
+
+                            </div>
+
+{/* <div class="btn-group">*/}
+{/*  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">*/}
+{/*    Action <span class="caret"></span>*/}
+{/*  </button>*/}
+{/*  <ul class="dropdown-menu">*/}
+{/*    <li><a href="#">Action</a></li>*/}
+{/*    <li><a href="#">Another action</a></li>*/}
+{/*    <li><a href="#">Something else here</a></li>*/}
+{/*    <li role="separator" class="divider"></li>*/}
+{/*    <li><a href="#">Separated link</a></li>*/}
+{/*  </ul>*/}
+{/*</div>*/}
+
 					  <select value={this.state.selected_category} onChange={this.handleCategoryChange}>
 						<option >Pick a value</option>
-						<option value={this.state.Category_list[0]}>{this.state.Category_list[0]}</option>
-						<option value={this.state.Category_list[1]}>{this.state.Category_list[1]}</option>
-						<option value={this.state.Category_list[2]}>{this.state.Category_list[2]}</option>
-						<option value={this.state.Category_list[3]}>{this.state.Category_list[3]}</option>
+						<option   >{this.state.Category_list[0]}</option>
+						<option>{this.state.Category_list[1]}</option>
+						<option  >{this.state.Category_list[2]}</option>
+						<option >{this.state.Category_list[3]}</option>
 					  </select>
+
+
+
 					</label>
 					<br></br>
-					<label>
-					  Question: 
-					  <textarea value={this.state.question} onChange={this.handleQuestionChange} />
-					</label>
-					<br></br>
-					<input type="submit" value="Submit" />
+
+					<input class="btn btn-primary btn-sm"  type="submit" value="Submit" />
 				  </form>
             }
 

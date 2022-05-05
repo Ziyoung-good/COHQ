@@ -19,6 +19,14 @@
 	text-align: center;
 }
 
+.student-question-title{
+	font-family: Cinzel;
+	font-size: 30px;
+	color: #5E7EBE;
+	margin-bottom: 25px;
+	text-align: left;
+}
+
 
 .question-table{
   padding-top: 10px;
