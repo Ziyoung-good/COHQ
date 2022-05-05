@@ -1,13 +1,14 @@
 
 
 .Dashboard-container{
-  width:1050px;
   /*display: flex;
   flex-flow: row wrap;
   justify-content: space-evenly;*/
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  display: table-cell;
+  width: 60%;
 }
 
 .GameKingdom{
@@ -47,11 +48,20 @@
   font-size: 30px;
 }
 
+.table-Row{
+  display: table;
+  width: 80%; /*Optional*/
+  height: auto;
+  table-layout: fixed; /*Optional*/
+  border-spacing: 10px; /*Optional*/
+}
+
 .Instructor-container{
-  /*display: flex;
-  flex-wrap: wrap;
-  column-gap: 10px;
-  row-gap: 10px;*/
+}
+
+.instructor-List{
+  display: table-cell;
+  width: 25%;
 }
 
 label {
@@ -69,7 +79,15 @@ label {
 }
 
 .open-close-container{
+  display:inline-block;
+}
 
+.footer-container{
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translate(-50%, -50%);
+  margin: 0 auto;
 }
 
 .open-button{
@@ -79,13 +97,13 @@ label {
   padding: 5px 5px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
   font-size: 15px;
   border-color:#6FA9EB;
   border-radius: 10px;
 }
 
 .Category-Control{
+  padding-top: 30px;
   display: flex;
   flex-wrap: wrap;
   column-gap: 10px;

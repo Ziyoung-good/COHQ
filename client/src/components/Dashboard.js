@@ -3,7 +3,6 @@ import '../style/Dashboard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNavbar from './PageNavbar';
 import DashboardButton from './DashboardButton';
-import '../style/Dashboard.css';
 import ReactDOM from "react-dom";
 import { withRouter } from "react-router-dom";
 import store from 'store';
@@ -12,7 +11,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faCoffee,faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Redirect } from 'react-router-dom';
 import ImageBox from './ImageBox';
-import {Message} from 'semantic-ui-react';
+import {Message, Header, Icon, List, Segment, Container} from 'semantic-ui-react';
 
 import { 
   Container1,
@@ -371,28 +370,76 @@ export default class Dashboard extends React.Component {
 
   return (
     <div className="Dashboard">
-      <PageNavbar active="dashboard" />
+      <PageNavbar active="dashboard"/>
 
-        
-      <br></br>
-          <div className="container">
+        <div className="table-Row">
+          <div className="instructor-List">
+            <Segment basic >
+                      <Header as="h2">Instructors</Header>
+                      <List>
+                                  <List.Item
+                                      style={{ marginBottom: "8px" }}
+                                  >
+                                      <Icon name="user" />
+                                      <List.Content>
+                                          <List.Header
+                                              as="a"
+                                              target="_blank">
+                                              Ziyang Luo
+                                          </List.Header>
+                                      </List.Content>
+                                  </List.Item>
+                                  <List.Item
+                                      style={{ marginBottom: "8px" }}
+                                  >
+                                      <Icon name="user" />
+                                      <List.Content>
+                                          <List.Header
+                                              as="a"
+                                              target="_blank">
+                                              Amber Wright
+                                          </List.Header>
+                                      </List.Content>
+                                  </List.Item>
+                                  <List.Item
+                                      style={{ marginBottom: "8px" }}
+                                  >
+                                      <Icon name="user" />
+                                      <List.Content>
+                                          <List.Header
+                                              as="a"
+                                              target="_blank">
+                                              Tao Luo
+                                          </List.Header>
+                                      </List.Content>
+                                  </List.Item>
+                      </List>
+            </Segment>
           </div>
-      
 
 
-
-          <br></br>
-        <div className="container">
-          <div className="jumbotron bg-transparent">
-                  <div className = "GameKingdom">
-                      Office Hour Queue for CIS700
-          </div>
           <div className="Dashboard-container">
-          {this.state.permission == 0 && <div className="Instructor-container">
 
-              <div className="open-close-container">
-                  {this.state.open_close_status == 0 && <button type="submit" className="open-button" onClick={() => this.handleQueueOpen()}>Open the Queue</button>}
-                  {this.state.open_close_status == 1 && <button type="submit" className="open-button" onClick={() => this.handleQueueClose()}>Close the Queue</button>}
+            {this.state.permission == 0 && <div className="Instructor-container">
+                
+              <div>
+                  <Header as="h2" style={{ flexGrow: 0, display: "inline-block", marginRight: "67%"}}>
+                    CIS700-003
+                    <Header.Subheader
+                        style={{
+                            whiteSpace: "break-spaces",
+                            wordBreak: "break-word",
+                        }}
+                    >
+                        Office Hour Queue
+                    </Header.Subheader>
+                  </Header>
+
+                <div className="open-close-container">
+                    {this.state.open_close_status == 0 && <button type="submit" className="open-button" onClick={() => this.handleQueueOpen()}>Open the Queue</button>}
+                    {this.state.open_close_status == 1 && <button type="submit" className="open-button" onClick={() => this.handleQueueClose()}>Close the Queue</button>}
+                </div>
+
               </div>
 
               {this.state.open_close_status == 0 && (
@@ -506,6 +553,17 @@ export default class Dashboard extends React.Component {
 			  
 			  <br></br>
 				{this.state.permission == 1 && <div className="student-container"> 
+          <Header as="h3" style={{ flexGrow: 0 }}>
+                CIS700-003
+                <Header.Subheader
+                    style={{
+                        whiteSpace: "break-spaces",
+                        wordBreak: "break-word",
+                    }}
+                >
+                    Office Hour Queue
+                </Header.Subheader>
+          </Header>
 				  {!this.state.question_submitted && <form onSubmit={this.handleSubmit}>
 					
 					<label>
@@ -558,14 +616,45 @@ export default class Dashboard extends React.Component {
 			  
           </div>
         </div>
-      </div>
+            
+            <div className="footer-container">
+              <Container style={{ marginTop: "auto" }} textAlign="center">
+                      Made with{" "}
+                      <span className="icon is-small">
+                          <i className="fa fa-heart" style={{ color: "red" }} />
+                      </span>{" "}
+                      by{" "}
+                      <a
+                          href=""
+                          target="_blank"
+                          rel="noopener noreferrer"
+                      >
+                          Amber
+                      </a>{" "}
+                      &{" "}
+                      <span
+                          role="button"
+                          style={{
+                              cursor: "pointer",
+                              color: "#4285f5",
+                          }}
+                      >
+                          Tao
+                      </span>{" "}
+                      |{" "}
+                          <span
+                          role="button"
+                          style={{
+                              cursor: "pointer",
+                              color: "#4285f5",
+                          }}
+                      >
+                          Ziyang
+                      </span>
+              </Container>
+            </div>
 	  
-	
-
-	  
-	  
-	  
-      </div>
+  </div>
   );
 }
 
