@@ -575,7 +575,8 @@ export default class Dashboard extends React.Component {
 					  <textarea rows="5" cols="40" value={this.state.question} onChange={this.handleQuestionChange} />
 					</label>
 					<br></br>
-                      
+                      <br></br>
+                        {/*<br></br>*/}
 					<label >
                         <div className="student-question-title">
 					  Question Category:
@@ -595,7 +596,7 @@ export default class Dashboard extends React.Component {
 {/*  </ul>*/}
 {/*</div>*/}
 
-					  <select value={this.state.selected_category} onChange={this.handleCategoryChange}>
+					  <select name="wgtmsr" id="wgtmsr" value={this.state.selected_category} onChange={this.handleCategoryChange}>
 						<option >Pick a value</option>
 						<option   >{this.state.Category_list[0]}</option>
 						<option>{this.state.Category_list[1]}</option>
@@ -606,9 +607,13 @@ export default class Dashboard extends React.Component {
 
 
 					</label>
-					<br></br>
+					{/*<br></br>*/}
+                      <br></br>
+{/*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/}
 
+                    {/*<div className="container2">*/}
 					<input class="btn btn-primary btn-sm"  type="submit" value="Submit" />
+                        {/*</div>*/}
 				  </form>
             }
 
