@@ -460,18 +460,22 @@ export default class Dashboard extends React.Component {
                       <div className="question-table">
                         <div className="Category-name">{this.state.Category_list[0]}</div>
                         <table className="table-item" border="1">
+						<thead>
                         <tr>
                           <th>position</th>
                           <th>Description</th>
                           <th>Name</th>
                         </tr>
+						</thead>
+						<tbody>
                           {this.state.Category[this.state.Category_list[0]]}
+						  </tbody>
                         </table>
                       </div>
 
                       <div className="button-Container">
                         {this.state.status == 0 && <div>
-                        <button class="btn btn-primary btn-sm" type="submit" onClick={() => this.handleStatusChange0(0)}>Answer</button></div>}
+                        <button className="btn btn-primary btn-sm" type="submit" onClick={() => this.handleStatusChange0(0)}>Answer</button></div>}
                         { this.state.current_group == 0 && this.state.status == 1 && <div>
                             <button  class="btn btn-secondary btn-sm" type="submit" onClick={() => this.handleStatusChange1(0)}>Answered</button></div>}
                       </div>    
@@ -484,12 +488,16 @@ export default class Dashboard extends React.Component {
                       <div className="question-table">
                         <div className="Category-name">{this.state.Category_list[1]}</div>
                         <table className="table-item" border="1">
+						<thead>
                           <tr>
                             <th>position</th>
                             <th>Description</th>
                             <th>Name</th>
                           </tr>
+						  </thead>
+						  <tbody>
                             {this.state.Category[this.state.Category_list[1]]}
+							</tbody>
                           </table>
                       </div>
                       <div className="button-Container">
@@ -507,12 +515,16 @@ export default class Dashboard extends React.Component {
                       <div className="question-table">
                         <div className="Category-name">{this.state.Category_list[2]}</div>
                         <table className="table-item" border="1">
+						<thead>
                           <tr>
                             <th>position</th>
                             <th>Description</th>
                             <th>Name</th>
                           </tr>
+						  </thead>
+						  <tbody>
                             {this.state.Category[this.state.Category_list[2]]}
+							</tbody>
                           </table>
                       </div>
                       <div className="button-Container">
@@ -531,20 +543,37 @@ export default class Dashboard extends React.Component {
                       <div className="question-table">
                         <div className="Category-name">{this.state.Category_list[3]}</div>
                         <table className="table-item" border="1">
+						<thead>
                           <tr>
                             <th>position</th>
                             <th>Description</th>
                             <th>Name</th>
                           </tr>
-                            {this.state.Category[this.state.Category_list[3]]}
+						  </thead>
+						  <tbody>
+                            {/*this.state.Category[this.state.Category_list[3]]*/} {/*COMMENTED OUT ONLY FOR POSTER*/}
+                          <tr>
+                            <td>5</td>
+                            <td>I need help debugging my code.</td>
+                            <td>Bob</td>
+							<td><input class="btn btn-primary btn-sm"  type="submit" value="Answer" /></td>
+                          </tr>                          
+						  <tr>
+                            <td>6</td>
+                            <td>My code is throwing a nullpointer error for Question (a).</td>
+                            <td>Sarah</td>
+							<td><input class="btn btn-primary btn-sm"  type="submit" value="Answer" /></td>
+                          </tr>
+							
+							</tbody>
                           </table>
                       </div>
-                      <div className="button-Container">
+                      {/*<div className="button-Container">
                         {this.state.status == 0 && <div>
                         <button class="btn btn-primary btn-sm" type="submit" onClick={() => this.handleStatusChange0(3)}>Answer</button></div>}
                         { this.state.current_group == 3 && this.state.status == 1 && <div>
                         <button class="btn btn-secondary btn-sm" type="submit" onClick={() => this.handleStatusChange1(3)}>Answered</button></div>}
-                      </div>
+                      </div>*/}
                 </div>
               </div>}
 
@@ -638,6 +667,11 @@ export default class Dashboard extends React.Component {
               })}
             </tbody>
           </table>
+		  <br></br>
+		  <input class="btn btn-primary btn-sm"  type="submit" value="Enter Category Room" />
+		  <br></br>
+		  <br></br>
+		  <input class="btn btn-danger btn-sm" type="submit" value="Remove Question" />
 
         </div>
         } {/*student submitted container*/}

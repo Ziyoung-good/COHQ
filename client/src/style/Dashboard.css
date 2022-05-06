@@ -12,7 +12,7 @@
 }
 
 .GameKingdom{
-	font-family: Cinzel;
+	font-family: 'Lato';
 	font-size: 40px;
 	color: #5E7EBE;
 	margin-bottom: 25px;
@@ -20,7 +20,7 @@
 }
 
 .student-question-title{
-	font-family: Cinzel;
+	font-family: 'Lato';
 	font-size: 30px;
 	color: #5E7EBE;
 	margin-bottom: 25px;
@@ -62,7 +62,8 @@ text-align: center;
 }
 
 .link-Container{
-  text-align: center;
+  font-family: 'Lato';
+  text-align: right;
 }
 
 .button-Container{
@@ -73,8 +74,7 @@ text-align: center;
 .Category-name{
   text-align: center;
   padding-bottom: 30px;
-  font-family: 'PT Sans';
-  font-style: italic;
+  font-family: 'Lato';
   font-weight: bold;
   font-size: 30px;
 }
@@ -85,6 +85,7 @@ text-align: center;
   height: auto;
   table-layout: fixed; /*Optional*/
   border-spacing: 10px; /*Optional*/
+  text-align: left;
 }
 
 .Instructor-container{
@@ -98,6 +99,8 @@ text-align: center;
 label {
   margin-top: .33em;
   display: block;
+  font-family: 'Lato';
+  text-align: right;
 }
 
 .Category-container{
@@ -139,6 +142,8 @@ label {
   flex-wrap: wrap;
   column-gap: 10px;
   row-gap: 10px;
+  font-family: 'Lato';
+  text-align: right;
 }
 
 .jumbotron
@@ -183,7 +188,7 @@ figure figcaption {
 }
 
 .student-table-itme {
-  border: 2px solid forestgreen;
+  border: 2px solid #6FA9EB;
   width: 800px;
   height: 200px;
 }
@@ -193,13 +198,13 @@ th {
 }
 
 td {
-  text-align: center;
+  text-align: left;
 }
 
 .table-item{
   margin-left: auto;
   margin-right: auto;
-  border: 2px solid forestgreen;
+  border: 2px solid #6FA9EB;
 }
 
 .Warning{
