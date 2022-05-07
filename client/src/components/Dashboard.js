@@ -54,6 +54,9 @@ export default class Dashboard extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleQueueOpen = this.handleQueueOpen.bind(this);
     this.handleQueueClose = this.handleQueueClose.bind(this);
+	this.checkQueueStatus = this.checkQueueStatus.bind(this);
+	this.checkInstructorTable = this.checkInstructorTable.bind(this);
+	this.runInterval = this.runInterval.bind(this);
   }
 
   // Get Random game which have url and photo.
@@ -115,6 +118,8 @@ export default class Dashboard extends React.Component {
 
             });
         }
+		
+
 
 
 
@@ -137,6 +142,7 @@ export default class Dashboard extends React.Component {
 				permission: user_permission
 			});
 			console.log("set permission: "+this.state.permission);
+			
 		});
 
     fetch("http://localhost:8081/getUserQuestions/"+store.get('user_name'), {
@@ -204,8 +210,109 @@ export default class Dashboard extends React.Component {
 		});
 	});
 
+	/** AUTO REFRESH**/
+	this.interval = setInterval(this.runInterval, 10000); // <- time in ms
+}
 
 
+stopInterval() {
+  clearInterval(this.interval);
+}
+
+componentWillUnmount() {
+  this.stopInterval();
+}
+
+runInterval() {
+	if (this.state.permission == 1) { //if this is the student, check the queue
+	  this.checkQueueStatus(); 
+	} else { // if this is the instructor, check the table
+		this.checkInstructorTable();
+	}
+}
+
+checkInstructorTable() {
+
+    // question page for professor
+    fetch("http://localhost:8081/ShowCategory/",
+    {
+      method: 'GET' // The type of HTTP request.
+    }).then(res => {
+      // Convert the response data to a JSON.
+      return res.json();
+
+    }, err => {
+      // Print the error if there is one.
+      console.log(err);
+    }).then(CategoryList => {
+      if (!CategoryList) return;
+      
+      
+      let Category_collection = [];
+      let question_List = [];
+
+
+      for (var i = 0; i < CategoryList.length; i++) {
+
+          // collect all category name
+          let CategoryName = CategoryList[i].category_name;
+          Category_collection.push(CategoryName);
+          if (i == 3){
+          this.setState({
+              Category_list: Category_collection,
+              }); 
+          }
+
+          var Category_question = [];
+
+          fetch("http://localhost:8081/"+CategoryName,{
+            method:'GET'
+          }).then(res=>{
+            return res.json();
+          }, err => {
+            console.log(err);
+          }).then(QuestionList =>{
+            if (!QuestionList) return;
+            let questions = []
+
+            for (var j = 0; j < QuestionList.length; j++){
+              let questionDiv = <ImageBox question_content={QuestionList[j].question_content} username={QuestionList[j].username} questionId = {QuestionList[j].question_id} />;
+              questions.push(questionDiv);
+            }
+
+            Category_question[CategoryName] = questions;
+
+            this.setState({
+                Category: Category_question
+            }); 
+
+            });
+        }
+	});
+}
+
+checkQueueStatus() {
+	// get the queue status
+	fetch("http://localhost:8081/getQueueStatus/0",
+	{
+	  method: 'GET' // The type of HTTP request.
+	}).then(res => {
+	  // Convert the response data to a JSON.
+	  console.log('getQueueStatus')
+	  return res.json();
+
+	}, err => {
+	  // Print the error if there is one.
+	  console.log(err);
+	}).then(data => {		
+		var q_status = data[0].value;
+		
+		if (this.state.open_close_status != q_status) {
+			this.setState({
+				open_close_status: q_status,
+			});
+		}
+	});
 }
 
 // change the value when after you submit
@@ -320,68 +427,65 @@ export default class Dashboard extends React.Component {
   }
 
   handleSubmit(event) {
-  
-	
-	
-	//update the question to the database for this category
-    fetch("http://localhost:8081/submitNewQuestion/"+this.state.selected_category+"&"+store.get('user_name')+"&"+this.state.question+"&"+this.state.priority_counter, {
-    method: 'GET' // The type of HTTP request.
-    }).then(res => {
-		console.log("question was submitted");
-    }, err => {
-    // Print the error if there is one.
-      console.log(err);
-    });
-	
-	alert('Your question was submitted to the queue: "' + this.state.question + '" with category ' + this.state.selected_category + ' and priority ' + this.state.priority_counter);
-    event.preventDefault();
 
-      this.setState({
-    question_submitted: true,
-	question: "",
-  });
+		//update the question to the database for this category
+		fetch("http://localhost:8081/submitNewQuestion/"+this.state.selected_category+"&"+store.get('user_name')+"&"+this.state.question+"&"+this.state.priority_counter, {
+		method: 'GET' // The type of HTTP request.
+		}).then(res => {
+			console.log("question was submitted");
+		}, err => {
+		// Print the error if there is one.
+		  console.log(err);
+		});
+		
+		alert('Your question was submitted to the queue: "' + this.state.question + '" with category ' + this.state.selected_category + ' and priority ' + this.state.priority_counter);
+		event.preventDefault();
+
+		  this.setState({
+		question_submitted: true,
+		question: "",
+	  });
 
 
-  //check to see if there are any questions in the question_table for the user
-  fetch("http://localhost:8081/getUserQuestions/"+store.get('user_name'), {
-    method: 'GET' // The type of HTTP request.
-    }).then(res => {
-    console.log("get users questions");
-    return res.json();
-    }, err => {
-    // Print the error if there is one.
-      console.log(err);
-    }).then( data => {    
-      var rows = data;
-      console.log("user question:"+store.get('user_name')+JSON.stringify(data)+Object.keys(data).length);
-      if (Object.keys(data).length > 0) {
-        this.setState({
-          student_rows: data,
-          question_submitted: true
-        });
-        console.log("set question_submitted state: "+this.state.question_submitted);
-      }
-    });
+	  //check to see if there are any questions in the question_table for the user
+	  fetch("http://localhost:8081/getUserQuestions/"+store.get('user_name'), {
+		method: 'GET' // The type of HTTP request.
+		}).then(res => {
+		console.log("get users questions");
+		return res.json();
+		}, err => {
+		// Print the error if there is one.
+		  console.log(err);
+		}).then( data => {    
+		  var rows = data;
+		  console.log("user question:"+store.get('user_name')+JSON.stringify(data)+Object.keys(data).length);
+		  if (Object.keys(data).length > 0) {
+			this.setState({
+			  student_rows: data,
+			  question_submitted: true
+			});
+			console.log("set question_submitted state: "+this.state.question_submitted);
+		  }
+		});
 
 
-  //get and update priority_counter
-  fetch("http://localhost:8081/getLatestPosition/"+store.get("user_name"), {
-  method: 'GET' // The type of HTTP request.
-  }).then(res => {
-    console.log("get priority_counter from getLastQPosition");
-    return res.json();
-  }, err => {
-  // Print the error if there is one.
-    console.log(err);
-  }).then( data => {    
-    var next_p = data[0].max;
-    console.log("next p:"+next_p);
-    this.setState({
-      priority_counter: next_p+1
-    });
-    console.log("initialize priority_counter: "+this.state.priority_counter);
-  });
-
+	  //get and update priority_counter
+	  fetch("http://localhost:8081/getLatestPosition/"+store.get("user_name"), {
+	  method: 'GET' // The type of HTTP request.
+	  }).then(res => {
+		console.log("get priority_counter from getLastQPosition");
+		return res.json();
+	  }, err => {
+	  // Print the error if there is one.
+		console.log(err);
+	  }).then( data => {    
+		var next_p = data[0].max;
+		console.log("next p:"+next_p);
+		this.setState({
+		  priority_counter: next_p+1
+		});
+		console.log("initialize priority_counter: "+this.state.priority_counter);
+	  });
 
   }
 
@@ -418,7 +522,6 @@ export default class Dashboard extends React.Component {
 
 	  });
 	  
-
   }
 
   handleQueueClose(e){
