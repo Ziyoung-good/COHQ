@@ -38,7 +38,7 @@ export default class Dashboard extends React.Component {
   	  priority_counter: 0,
   	  question: "",
   	  selected_category: "",
-      open_close_status: 0,
+      open_close_status: 1,   
       question_submitted: false,
       student_rows: [], //rows of questions for the (student) user
       refresh: 0,
@@ -116,6 +116,8 @@ export default class Dashboard extends React.Component {
             });
         }
 
+
+
 		console.log("get user permission for "+store.get('user_name'));
 		// get the user permission
 		fetch("http://localhost:8081/getUserPermission/"+store.get('user_name'),
@@ -181,9 +183,29 @@ export default class Dashboard extends React.Component {
           console.log(err);
       }); //Show Categories
 
-        this.setState({
-          refresh: 1
-        });
+
+	// get the queue status
+	fetch("http://localhost:8081/getQueueStatus/0",
+	{
+	  method: 'GET' // The type of HTTP request.
+	}).then(res => {
+	  // Convert the response data to a JSON.
+	  console.log('getQueueStatus')
+	  return res.json();
+
+	}, err => {
+	  // Print the error if there is one.
+	  console.log(err);
+	}).then(data => {		
+		var q_status = data[0].value;
+		console.log("queue_status:"+JSON.stringify(data)+q_status);
+		this.setState({
+			open_close_status: q_status,
+		});
+	});
+
+
+
 }
 
 // change the value when after you submit
@@ -275,6 +297,27 @@ export default class Dashboard extends React.Component {
 	  console.log("handleCategoryChange: "+event.target.value);
     this.setState({selected_category: event.target.value});
   }
+  
+  handleRemoveQ(event) {
+	 //remove the questions from the question_table in the database for this user
+    fetch("http://localhost:8081/deleteQuestionForUser/"+store.get('user_name'), {
+    method: 'GET' // The type of HTTP request.
+    }).then(res => {
+		console.log("question was removed");
+    }, err => {
+    // Print the error if there is one.
+      console.log(err);
+    });
+	
+	alert('Your question was removed from the queue.');
+    //event.preventDefault();
+
+	this.setState({
+		question_submitted: false
+	});
+	  
+	  
+  }
 
   handleSubmit(event) {
   
@@ -290,11 +333,12 @@ export default class Dashboard extends React.Component {
       console.log(err);
     });
 	
-	alert('Your question was submitted to the queue: ' + this.state.question + " with category" + this.state.selected_category + " and priority " + this.state.priority_counter);
+	alert('Your question was submitted to the queue: "' + this.state.question + '" with category ' + this.state.selected_category + ' and priority ' + this.state.priority_counter);
     event.preventDefault();
 
       this.setState({
-    question_submitted: true
+    question_submitted: true,
+	question: "",
   });
 
 
@@ -342,15 +386,74 @@ export default class Dashboard extends React.Component {
   }
 
   handleQueueOpen(e){
-    this.setState({
-      open_close_status: 1
-    });
+	  //set queue status = 1 in the database since the queue is open
+	fetch("http://localhost:8081/setQueueStatus/1", {
+	  method: 'GET' // The type of HTTP request.
+	  }).then(res => {
+		return res.json();
+	  }, err => {
+	  // Print the error if there is one.
+		console.log(err);
+	  }).then( data => {    
+
+		// get the queue status
+		fetch("http://localhost:8081/getQueueStatus/1",
+		{
+		  method: 'GET' // The type of HTTP request.
+		}).then(res => {
+		  // Convert the response data to a JSON.
+		  console.log('getQueueStatus')
+		  return res.json();
+
+		}, err => {
+		  // Print the error if there is one.
+		  console.log(err);
+		}).then(data => {		
+			var q_status = data[0].value;
+			console.log("queue_status:"+JSON.stringify(data)+q_status);
+			this.setState({
+				open_close_status: q_status,
+			});
+		});
+
+	  });
+	  
+
   }
 
   handleQueueClose(e){
-    this.setState({
-      open_close_status: 0
-    });
+	  //set queue status = 0 in the database since the queue is closed
+	fetch("http://localhost:8081/setQueueStatus/0", {
+	  method: 'GET' // The type of HTTP request.
+	  }).then(res => {
+		return res.json();
+	  }, err => {
+	  // Print the error if there is one.
+		console.log(err);
+	  }).then( data => {    
+
+		// get the queue status
+		fetch("http://localhost:8081/getQueueStatus/0",
+		{
+		  method: 'GET' // The type of HTTP request.
+		}).then(res => {
+		  // Convert the response data to a JSON.
+		  console.log('getQueueStatus')
+		  return res.json();
+		}, err => {
+		  // Print the error if there is one.
+		  console.log(err);
+		}).then(data => {		
+			var q_status = data[0].value;
+			console.log("queue_status:"+JSON.stringify(data)+q_status);
+			this.setState({
+				open_close_status: q_status,
+			});
+		});
+
+	  });
+	
+	
     fetch("/deleteQuestions/", {
     method: 'GET' // The type of HTTP request.
     }).then(res => {
@@ -502,9 +605,9 @@ export default class Dashboard extends React.Component {
                       </div>
                       <div className="button-Container">
                         {this.state.status == 0 && <div>
-                        <button class="btn btn-primary btn-sm" type="submit" onClick={() => this.handleStatusChange0(1)}>Answer</button></div>}
+                        <button className="btn btn-primary btn-sm" type="submit" onClick={() => this.handleStatusChange0(1)}>Answer</button></div>}
                         { this.state.current_group == 1 && this.state.status == 1 && <div>
-                        <button class="btn btn-secondary btn-sm" type="submit" onClick={() => this.handleStatusChange1(1)}>Answered</button></div>}
+                        <button className="btn btn-secondary btn-sm" type="submit" onClick={() => this.handleStatusChange1(1)}>Answered</button></div>}
                       </div>
                 </div>
                 <div className="Category-container">
@@ -529,9 +632,9 @@ export default class Dashboard extends React.Component {
                       </div>
                       <div className="button-Container">
                         {this.state.status == 0 && <div>
-                        <button class="btn btn-primary btn-sm" type="submit" onClick={() => this.handleStatusChange0(2)}>Answer</button></div>}
+                        <button className="btn btn-primary btn-sm" type="submit" onClick={() => this.handleStatusChange0(2)}>Answer</button></div>}
                         { this.state.current_group == 2 && this.state.status == 1 && <div>
-                        <button class="btn btn-secondary btn-sm" type="submit" onClick={() => this.handleStatusChange1(2)}>Answered</button></div>}
+                        <button className="btn btn-secondary btn-sm" type="submit" onClick={() => this.handleStatusChange1(2)}>Answered</button></div>}
                       </div>
 
                 </div>
@@ -556,13 +659,13 @@ export default class Dashboard extends React.Component {
                             <td>5</td>
                             <td>I need help debugging my code.</td>
                             <td>Bob</td>
-							<td><input class="btn btn-primary btn-sm"  type="submit" value="Answer" /></td>
+							<td><input className="btn btn-primary btn-sm"  type="submit" value="Answer" /></td>
                           </tr>                          
 						  <tr>
                             <td>6</td>
                             <td>My code is throwing a nullpointer error for Question (a).</td>
                             <td>Sarah</td>
-							<td><input class="btn btn-primary btn-sm"  type="submit" value="Answer" /></td>
+							<td><input className="btn btn-primary btn-sm"  type="submit" value="Answer" /></td>
                           </tr>
 							
 							</tbody>
@@ -593,7 +696,18 @@ export default class Dashboard extends React.Component {
                     Office Hour Queue
                 </Header.Subheader>
           </Header>
-				  {!this.state.question_submitted && <form onSubmit={this.handleSubmit}>
+		  
+		  {this.state.open_close_status == 0 && (
+                            <Message
+                                header="Queue Closed"
+                                error
+                                icon="calendar times outline"
+                                content="This queue is currently closed. Contact course staff if you think this is an error."
+                            />
+              )}
+		  
+		  
+				  {!this.state.question_submitted && this.state.open_close_status == 1 && <form onSubmit={this.handleSubmit}>
 					
 
 					<label>
@@ -641,12 +755,12 @@ export default class Dashboard extends React.Component {
 {/*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/}
 
                     {/*<div className="container2">*/}
-					<input class="btn btn-primary btn-sm"  type="submit" value="Submit" />
+					<input className="btn btn-primary btn-sm"  type="submit" value="Submit" />
                         {/*</div>*/}
 				  </form>
             }
 
-        {this.state.question_submitted && <div className="student-submitted-container">
+        {this.state.question_submitted && this.state.open_close_status == 1 && <div className="student-submitted-container">
           <table  className="student-table-itme">
             <thead>
               <tr>
@@ -668,10 +782,10 @@ export default class Dashboard extends React.Component {
             </tbody>
           </table>
 		  <br></br>
-		  <input class="btn btn-primary btn-sm"  type="submit" value="Enter Category Room" />
+		  <input className="btn btn-primary btn-sm"  value="Enter Room" />
 		  <br></br>
 		  <br></br>
-		  <input class="btn btn-danger btn-sm" type="submit" value="Remove Question" />
+		  <input className="btn btn-danger btn-sm" onClick={() => this.handleRemoveQ()} value="Remove Question" />
 
         </div>
         } {/*student submitted container*/}

@@ -37,6 +37,8 @@ app.get('/updateIdForQuestions/', routes.updateIdForQuestions);
 
 app.get('/getUserPermission/:username', routes.getUserPermission);
 
+app.get('/deleteQuestionForUser/:username', routes.deleteQuestionForUser);
+
 app.get('/submitNewQuestion/:categoryId&:username&:question&:questionId', routes.submitNewQuestion);
 
 app.get('/getLatestPosition/:username', routes.getLatestPosition);
@@ -44,6 +46,10 @@ app.get('/getLatestPosition/:username', routes.getLatestPosition);
 app.get('/getUserQuestions/:username', routes.getUserQuestions);
 
 app.get('/deleteQuestions/', routes.deleteQuestions);
+
+app.get('/getQueueStatus/:queue_status', routes.getQueueStatus);
+
+app.get('/setQueueStatus/:queue_status', routes.setQueueStatus);
 
 /* ---- (user) ---- */
 

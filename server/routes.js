@@ -119,6 +119,18 @@ function deleteQuestionsForCategory(req, res){
   });
 }
 
+function deleteQuestionForUser(req, res){
+   var username = req.params.username;
+  //delete questions in the category
+  var query = `DELETE FROM question_table WHERE username = '${username}' `;
+  connection.query(query, function(err, rows, fields){
+    if (err) console.log(err);
+    else{
+      res.json(rows);
+    }
+  });
+}
+
 function getUserQuestions(req, res) {
   var username = req.params.username;
   console.log("getUserQuestions:"+username);
@@ -137,6 +149,33 @@ function getLatestPosition(req, res) {
   console.log("getLatestPosition");
 
   var query = `select max(question_id) as max from question_table `;
+
+  connection.query(query, function(err, rows, fields){
+    if (err) console.log(err);
+    else{
+      res.json(rows);
+    }
+  });
+};
+
+function getQueueStatus(req, res) {
+  console.log("getQueueStatus");
+
+  var query = `select value from global_variables where variable='queue_status'`;
+
+  connection.query(query, function(err, rows, fields){
+    if (err) console.log(err);
+    else{
+      res.json(rows);
+    }
+  });
+};
+
+function setQueueStatus(req, res) {
+  console.log("setQueueStatus");
+  var queue_status = req.params.queue_status;
+
+  var query = `UPDATE global_variables SET value=${queue_status} where variable='queue_status' `;
 
   connection.query(query, function(err, rows, fields){
     if (err) console.log(err);
@@ -232,4 +271,7 @@ module.exports = {
   deleteQuestions: deleteQuestions,
   getLatestPosition: getLatestPosition,
   getUserQuestions: getUserQuestions,
+  deleteQuestionForUser: deleteQuestionForUser,
+  getQueueStatus: getQueueStatus,
+  setQueueStatus: setQueueStatus,
 };
