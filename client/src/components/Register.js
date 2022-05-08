@@ -91,7 +91,7 @@ export default class Register extends React.Component {
 					<div>
 						<input type='password' name='password' value={this.state.password} placeholder='password' onChange={this.handleChange} />
 					</div>
-					{/*<button className = "Sign" onClick={this.register}>Register</button>*/}
+					<button className = "Sign" onClick={this.register}>Register</button>
 					<h5 style={{ textAlign: 'center' }}>Or</h5>
 					<button className = "Sign" onClick={this.login}>Sign in</button>
 				</form>

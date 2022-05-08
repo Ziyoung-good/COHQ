@@ -48,6 +48,7 @@ export default class Dashboard extends React.Component {
     // this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleStatusChange0 = this.handleStatusChange0.bind(this);
     this.handleStatusChange1 = this.handleStatusChange1.bind(this);
+    this.handleStatusChangePrivate = this.handleStatusChangePrivate.bind(this);
     this.handleLinkChange = this.handleLinkChange.bind(this);
 	 this.handleQuestionChange = this.handleQuestionChange.bind(this);
 	 this.handleCategoryChange = this.handleCategoryChange.bind(this);
@@ -375,7 +376,7 @@ checkQueueStatus() {
     });
 
     //update questions Id
-    fetch("http://localhost:8081/updateIdForQuestions/", {
+    fetch("http://localhost:8081/updateIdForQuestions/"+current_group_name, {
     method: 'GET' // The type of HTTP request.
     }).then(res => {
     }, err => {
@@ -391,6 +392,32 @@ checkQueueStatus() {
     this.setState({
       status: 0
     });
+  }
+
+  handleStatusChangePrivate(e){
+
+  	let current_group_name = this.state.Category_list[e];
+    fetch("http://localhost:8081/deleteQuestionsForPrivate/"+current_group_name, {
+    method: 'GET' // The type of HTTP request.
+    }).then(res => {
+    }, err => {
+    // Print the error if there is one.
+      console.log(err);
+    });
+
+     //update questions Id
+    fetch("http://localhost:8081/updateIdForQuestions/"+current_group_name, {
+    method: 'GET' // The type of HTTP request.
+    }).then(res => {
+    }, err => {
+    // Print the error if there is one.
+      console.log(err);
+    });
+
+    this.setState({
+      status: 0
+    });
+
   }
   
   // handle the action submitting a question
@@ -747,7 +774,16 @@ checkQueueStatus() {
                       </div>
 
                       <div className="question-table">
-                        <div className="Category-name">{this.state.Category_list[3]}</div>
+                      	<div className="private-title">
+                        <div className="Category-name-private">{this.state.Category_list[3]}</div>
+                        <Header.Subheader
+                        style={{
+                            whiteSpace: "break-spaces",
+                        }}
+                    	>
+                    	 (Each Click only help one Student for the Category)
+                    	</Header.Subheader>
+                    	</div>
                         <table className="table-item" border="1">
 						<thead>
                           <tr>
@@ -757,29 +793,16 @@ checkQueueStatus() {
                           </tr>
 						  </thead>
 						  <tbody>
-                            {/*this.state.Category[this.state.Category_list[3]]*/} {/*COMMENTED OUT ONLY FOR POSTER*/}
-                          <tr>
-                            <td>5</td>
-                            <td>I need help debugging my code.</td>
-                            <td>Bob</td>
-							<td><input className="btn btn-primary btn-sm"  type="submit" value="Answer" /></td>
-                          </tr>                          
-						  <tr>
-                            <td>6</td>
-                            <td>My code is throwing a nullpointer error for Question (a).</td>
-                            <td>Sarah</td>
-							<td><input className="btn btn-primary btn-sm"  type="submit" value="Answer" /></td>
-                          </tr>
-							
+                            {this.state.Category[this.state.Category_list[3]]}
 							</tbody>
                           </table>
                       </div>
-                      {/*<div className="button-Container">
+                      {<div className="button-Container">
                         {this.state.status == 0 && <div>
                         <button class="btn btn-primary btn-sm" type="submit" onClick={() => this.handleStatusChange0(3)}>Answer</button></div>}
                         { this.state.current_group == 3 && this.state.status == 1 && <div>
-                        <button class="btn btn-secondary btn-sm" type="submit" onClick={() => this.handleStatusChange1(3)}>Answered</button></div>}
-                      </div>*/}
+                        <button class="btn btn-secondary btn-sm" type="submit" onClick={() => this.handleStatusChangePrivate(3)}>Answered</button></div>}
+                      </div>}
                 </div>
               </div>}
 

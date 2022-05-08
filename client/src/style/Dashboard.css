@@ -79,6 +79,18 @@ text-align: center;
   font-size: 30px;
 }
 
+.Category-name-private{
+  text-align: center;
+  padding-bottom: 10px;
+  font-family: 'Lato';
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.private-title{
+   padding-bottom: 20px;
+}
+
 .table-Row{
   display: table;
   width: 80%; /*Optional*/

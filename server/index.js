@@ -33,7 +33,9 @@ app.get('/deleteLinkForCategory/:Group', routes.deleteLinkForCategory);
 
 app.get('/deleteQuestionsForCategory/:Group', routes.deleteQuestionsForCategory);
 
-app.get('/updateIdForQuestions/', routes.updateIdForQuestions);
+app.get('/deleteQuestionsForPrivate/:Group', routes.deleteQuestionsForPrivate);
+
+app.get('/updateIdForQuestions/:Group', routes.updateIdForQuestions);
 
 app.get('/getUserPermission/:username', routes.getUserPermission);
 

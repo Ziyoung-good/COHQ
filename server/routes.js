@@ -60,7 +60,6 @@ function submitNewQuestion(req, res) {
 
 function getUserPermission(req, res) {
   var username = req.params.username;
-  console.log("getUserPermission:"+username);
   
   var query = `select permission, username from user_info Where username = '${username}' `;
 
@@ -119,6 +118,20 @@ function deleteQuestionsForCategory(req, res){
   });
 }
 
+function deleteQuestionsForPrivate(req, res){
+  var Group = req.param('Group');
+  var query = `DELETE FROM question_table
+              WHERE question_id IN (
+              SELECT question_id FROM
+            (select * from question_table WHERE category='${Group}'  LIMIT 1) as t)`;
+  connection.query(query, function(err, rows, fields){
+    if (err) console.log(err);
+    else{
+      res.json(rows);
+    }
+  });
+}
+
 function deleteQuestionForUser(req, res){
    var username = req.params.username;
   //delete questions in the category
@@ -146,7 +159,6 @@ function getUserQuestions(req, res) {
 };
 
 function getLatestPosition(req, res) {
-  console.log("getLatestPosition");
 
   var query = `select max(question_id) as max from question_table `;
 
@@ -159,7 +171,6 @@ function getLatestPosition(req, res) {
 };
 
 function getQueueStatus(req, res) {
-  console.log("getQueueStatus");
 
   var query = `select value from global_variables where variable='queue_status'`;
 
@@ -172,7 +183,6 @@ function getQueueStatus(req, res) {
 };
 
 function setQueueStatus(req, res) {
-  console.log("setQueueStatus");
   var queue_status = req.params.queue_status;
 
   var query = `UPDATE global_variables SET value=${queue_status} where variable='queue_status' `;
@@ -188,6 +198,7 @@ function setQueueStatus(req, res) {
 
 function updateIdForQuestions(req, res){
     //reorder all questions
+  console.log('enter the update function');
   var query = "SET @var:=0; UPDATE question_table SET question_id =(@var:=@var+1); ALTER TABLE question_table AUTO_INCREMENT=1"; 
   connection.query(query, function(err, rows, fields){
     if (err) console.log(err);
@@ -203,7 +214,7 @@ function registerResponse(req, res) {
   var username = req.body.username;
   var password = req.body.password;
   var check = 'select password from user_info where username = "' + username + '"';
-  var register = "insert into user_info (username, password) values (\"" + username + "\",\"" + password + "\");";
+  var register = "insert into user_info (username, password, permission) values (\"" + username + "\",\"" + password + "\",\"" + 1 + "\");";
   connection.query(check, function (err, result) {
     var message = JSON.stringify(result);
     if (message.length == 2) {
@@ -274,4 +285,5 @@ module.exports = {
   deleteQuestionForUser: deleteQuestionForUser,
   getQueueStatus: getQueueStatus,
   setQueueStatus: setQueueStatus,
+  deleteQuestionsForPrivate: deleteQuestionsForPrivate
 };
