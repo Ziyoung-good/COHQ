@@ -58,6 +58,27 @@ function submitNewQuestion(req, res) {
   });
 };
 
+
+function changeQuestionCategory(req, res){
+  var categoryName = req.params.categoryName;
+  var questionId = req.params.questionId;
+
+  var query = `UPDATE question_table 
+SET 
+    category = '${categoryName}'
+WHERE
+    question_id = '${questionId}';
+`
+
+   connection.query(query, function(err, rows, fields){
+    if (err) console.log(err);
+    else{
+      res.json(rows);
+    }
+  });
+};
+
+
 function getUserPermission(req, res) {
   var username = req.params.username;
   
@@ -285,5 +306,6 @@ module.exports = {
   deleteQuestionForUser: deleteQuestionForUser,
   getQueueStatus: getQueueStatus,
   setQueueStatus: setQueueStatus,
-  deleteQuestionsForPrivate: deleteQuestionsForPrivate
+  deleteQuestionsForPrivate: deleteQuestionsForPrivate,
+  changeQuestionCategory: changeQuestionCategory
 };

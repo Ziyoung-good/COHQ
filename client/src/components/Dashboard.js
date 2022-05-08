@@ -29,6 +29,7 @@ export default class Dashboard extends React.Component {
     this.state = {
       Category: [],
       Category_list: [],
+      Question_id_list: [],
       search: "",
       rec1Text: "",
       status: 0,
@@ -42,6 +43,8 @@ export default class Dashboard extends React.Component {
       question_submitted: false,
       student_rows: [], //rows of questions for the (student) user
       refresh: 0,
+      selected_question_instructor: "",
+      selected_category_instructor: ""
     }
 	// 
   
@@ -58,6 +61,9 @@ export default class Dashboard extends React.Component {
 	this.checkQueueStatus = this.checkQueueStatus.bind(this);
 	this.checkInstructorTable = this.checkInstructorTable.bind(this);
 	this.runInterval = this.runInterval.bind(this);
+	this.handleQuestionForInstructorChange = this.handleQuestionForInstructorChange.bind(this);
+	this.handleCategoryForInstructorChange = this.handleCategoryForInstructorChange.bind(this);
+	this.handleCategoryChangeSubmit = this.handleCategoryChangeSubmit.bind(this);
   }
 
   // Get Random game which have url and photo.
@@ -80,8 +86,7 @@ export default class Dashboard extends React.Component {
       
       
       let Category_collection = [];
-      let question_List = [];
-
+      let question_id = []
 
       for (var i = 0; i < CategoryList.length; i++) {
 
@@ -95,7 +100,7 @@ export default class Dashboard extends React.Component {
           }
 
           var Category_question = [];
-
+      
           fetch("http://localhost:8081/"+CategoryName,{
             method:'GET'
           }).then(res=>{
@@ -104,19 +109,19 @@ export default class Dashboard extends React.Component {
             console.log(err);
           }).then(QuestionList =>{
             if (!QuestionList) return;
-            let questions = []
+            let questions = [];
 
             for (var j = 0; j < QuestionList.length; j++){
               let questionDiv = <ImageBox question_content={QuestionList[j].question_content} username={QuestionList[j].username} questionId = {QuestionList[j].question_id} />;
               questions.push(questionDiv);
+              question_id.push(QuestionList[j].question_id);  
             }
-
+            
             Category_question[CategoryName] = questions;
-
             this.setState({
+            	Question_id_list: question_id,
                 Category: Category_question
             }); 
-
             });
         }
 		
@@ -250,7 +255,6 @@ checkInstructorTable() {
       
       
       let Category_collection = [];
-      let question_List = [];
 
 
       for (var i = 0; i < CategoryList.length; i++) {
@@ -265,6 +269,7 @@ checkInstructorTable() {
           }
 
           var Category_question = [];
+          var question_id = [];
 
           fetch("http://localhost:8081/"+CategoryName,{
             method:'GET'
@@ -278,12 +283,14 @@ checkInstructorTable() {
 
             for (var j = 0; j < QuestionList.length; j++){
               let questionDiv = <ImageBox question_content={QuestionList[j].question_content} username={QuestionList[j].username} questionId = {QuestionList[j].question_id} />;
-              questions.push(questionDiv);
+              questions.push(questionDiv); 
+              question_id.push(QuestionList[j].question_id);
             }
 
             Category_question[CategoryName] = questions;
 
             this.setState({
+            	Question_id_list: question_id,
                 Category: Category_question
             }); 
 
@@ -422,14 +429,20 @@ checkQueueStatus() {
   
   // handle the action submitting a question
   handleQuestionChange(event) {
-	  console.log("handleQuestionChange: "+event.target.value);
     this.setState({question: event.target.value});
   }
 
   // handle the action submitting a question
   handleCategoryChange(event) {
-	  console.log("handleCategoryChange: "+event.target.value);
     this.setState({selected_category: event.target.value});
+  }
+
+  handleCategoryForInstructorChange(event){
+  	this.setState({selected_category_instructor: event.target.value});
+  }
+
+  handleQuestionForInstructorChange(event){
+  	this.setState({selected_question_instructor: event.target.value});
   }
   
   handleRemoveQ(event) {
@@ -514,6 +527,17 @@ checkQueueStatus() {
 		console.log("initialize priority_counter: "+this.state.priority_counter);
 	  });
 
+  }
+
+  handleCategoryChangeSubmit(event){
+  	fetch("http://localhost:8081/changeQuestionCategory/"+this.state.selected_category_instructor+"&"+this.state.selected_question_instructor, {
+		method: 'GET' // The type of HTTP request.
+		}).then(res => {
+			console.log("category was submitted");
+		}, err => {
+		// Print the error if there is one.
+		  console.log(err);
+		});
   }
 
   handleQueueOpen(e){
@@ -802,11 +826,26 @@ checkQueueStatus() {
                         <button class="btn btn-primary btn-sm" type="submit" onClick={() => this.handleStatusChange0(3)}>Answer</button></div>}
                         { this.state.current_group == 3 && this.state.status == 1 && <div>
                         <button class="btn btn-secondary btn-sm" type="submit" onClick={() => this.handleStatusChangePrivate(3)}>Answered</button></div>}
-                      </div>}
+                  		</div>}
                 </div>
               </div>}
+               {this.state.open_close_status == 1 && <div className="Category-change-control">
+              			 <div className="student-question-title">Pick a Question you want to move to an another Category:</div>
+	              		<form onSubmit={this.handleCategoryChangeSubmit}>
+						<select name="cq1" id="cq1" value={this.state.selected_question_instructor} onChange={this.handleQuestionForInstructorChange}>
+							<option >Pick a question</option>
+							{this.state.Question_id_list.map( (x,y) => 
+	      						<option key={y}>{x}</option> )}
+						  </select>
+						  <select name="cq2" id="cq2" value={this.state.selected_category_instructor} onChange={this.handleCategoryForInstructorChange}>
+							<option >Pick a Category</option>
+							{this.state.Category_list.map( (x,y) => 
+	      						<option key={y}>{x}</option> )}
+						  </select>
+						 <input className="btn btn-primary btn-sm"  type="submit" value="Submit" />
+					  	</form>
+				</div>}
 
-			
                     </div> }{/*instructor container*/}
 			  
 			  <br></br>

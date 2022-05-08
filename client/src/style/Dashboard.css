@@ -124,6 +124,10 @@ label {
   flex: 0 0 49%;
 }
 
+.Category-change-control{
+  margin-top:40px;
+}
+
 .open-close-container{
   display:inline-block;
 }

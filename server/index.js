@@ -43,6 +43,8 @@ app.get('/deleteQuestionForUser/:username', routes.deleteQuestionForUser);
 
 app.get('/submitNewQuestion/:categoryId&:username&:question&:questionId', routes.submitNewQuestion);
 
+app.get('/changeQuestionCategory/:categoryName&:questionId', routes.changeQuestionCategory);
+
 app.get('/getLatestPosition/:username', routes.getLatestPosition);
 
 app.get('/getUserQuestions/:username', routes.getUserQuestions);
